@@ -7,10 +7,10 @@ import com.soywiz.korge.view.View
 class Communication: Entity {
 
     var age = 0;
-    val message = "Sweet Caroline"
+    val message: String
 
-    constructor(origin: Coordinate): super(origin, "korge.png"){
-
+    constructor(origin: Coordinate, message: String): super(origin, "korge.png"){
+        this.message = message
     }
 
     override suspend fun display(): View {

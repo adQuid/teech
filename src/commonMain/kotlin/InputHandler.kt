@@ -10,10 +10,11 @@ import ui.UIMain
 object InputHandler {
 
     val keyPressMappings = mutableMapOf(
-        Key.T to { ShortStateController.activeShortGame.communications
-                .add(Communication(Coordinate(UIMain.player!!.location.x,UIMain.player!!.location.y))) },
-        Key.A to {UIMain.player!!.targetX = UIMain.player!!.location.x - 50; UIMain.player!!.location.x -= 10},
-        Key.D to {UIMain.player!!.targetX = UIMain.player!!.location.x + 50}
+        Key.T to { UIMain.player!!.say("Sweet Caroline") },
+        Key.A to {UIMain.player!!.targetX = UIMain.player!!.location.x - 50},
+        Key.D to {UIMain.player!!.targetX = UIMain.player!!.location.x + 50},
+        Key.S to {UIMain.player!!.targetY = UIMain.player!!.location.y + 50},
+        Key.W to {UIMain.player!!.targetY = UIMain.player!!.location.y - 50}
     )
 
     val mouseButtonMappings = mutableMapOf(

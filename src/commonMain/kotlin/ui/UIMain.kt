@@ -12,6 +12,7 @@ import com.soywiz.korge.ui.TextButton
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.format.readBitmap
+import com.soywiz.korio.async.async
 import com.soywiz.korio.async.launchImmediately
 import com.soywiz.korio.file.std.resourcesVfs
 import com.soywiz.korma.geom.degrees
@@ -34,9 +35,7 @@ object UIMain {
     var player: ShortStateCharacter? = null
 
     suspend fun makeUI() = Korge(width = width, height = height, bgcolor = Colors["#2b2b2b"]) {
-        var clicks = 1
         onClick{
-            println(clicks++)
             InputHandler.handleInput(it.lastEvent)
         }
 
@@ -73,7 +72,8 @@ object UIMain {
             addEntities(ShortStateController.activeShortGame.characters, charactersBeingDrawn, 0)
             addEntities(ShortStateController.activeShortGame.communications, communicationsBeingDrawn, charactersBeingDrawn.size)
 
-            charactersBeingDrawn.filter{it.key.location.x != null && it.value.x != it.key.location.x.toDouble()}.forEach {
+            charactersBeingDrawn.filter{(it.key.location.x != null && it.value.x != it.key.location.x.toDouble()) || (it.key.location.y != null && it.value.y != it.key.location.y.toDouble())}
+                    .forEach {
                 val image = it.value
 
                 val pixelsToMove = 100 * frameDelay / 1000
@@ -87,9 +87,21 @@ object UIMain {
                             it.value.x
                         }
 
-                if(newX != it.value.x){
-                    launchImmediately {
+                var newY =
+                        if(it.value.y > it.key.location.y!!.toDouble()){
+                            max(it.value.y - pixelsToMove, it.key.location.y!!.toDouble())
+                        } else if(it.value.y < it.key.location.y!!.toDouble()){
+                            min(it.value.y + pixelsToMove, it.key.location.y!!.toDouble())
+                        } else {
+                            it.value.y
+                        }
+
+                if(newX != it.value.x || newY != it.value.y){
+                    async {
                         image.tween(image::x[image.x, newX], time = frameDelay.milliseconds, easing = Easing.LINEAR)
+                    }
+                    async {
+                        image.tween(image::y[image.y, newY], time = frameDelay.milliseconds, easing = Easing.LINEAR)
                     }
                 }
 

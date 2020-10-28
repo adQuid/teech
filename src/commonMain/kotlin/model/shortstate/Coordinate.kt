@@ -9,4 +9,8 @@ class Coordinate {
         this.x = x
         this.y = y
     }
+
+    fun plus(other: Coordinate): Coordinate{
+        return Coordinate(x + other.x, y + other.y)
+    }
 }

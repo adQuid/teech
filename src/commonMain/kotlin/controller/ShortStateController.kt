@@ -23,8 +23,21 @@ object ShortStateController {
                         it.location.x -= pixelsToMove
                     }
                 }
+                if(it.targetY != null){
+                    if(it.targetY!! > it.location.y){
+                        it.location.y += pixelsToMove
+                    }
+                    if(it.targetY!! < it.location.y){
+                        it.location.y -= pixelsToMove
+                    }
+                }
             }
 
+            activeShortGame.communications.filter{it.age == 50}.forEach{communication ->
+                activeShortGame.charactersInRange(communication.location, 400).forEach { recipient ->
+                    recipient.convoAI.respondToLine(communication)
+                }
+            }
             activeShortGame.communications.forEach { it.age++ }
             activeShortGame.communications.removeAll { it.age > 100 }
         }
