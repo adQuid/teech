@@ -57,6 +57,7 @@ object UIMain {
             entityList.filter{!entityMap.keys.contains(it as Entity)}.forEach{
                 entityMap[it] = it.display()
                 entityMap[it]!!.position(it.location.x, it.location.y)
+                entityMap[it]!!.scale = 0.8
 
                 addChildAt(entityMap[it]!!, i++)
             }
