@@ -17,7 +17,7 @@ class ConversationAI {
     }
 
     fun respondToLine(communication: Communication){
-        if(UIMain.player != parent && communication.message.contains("Sweet")){
+        if(communication.message.contains("Sweet")){
             parent.say("Bah Bah Bah")
         }
     }

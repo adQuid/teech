@@ -19,7 +19,7 @@ object InputHandler {
 
     val mouseButtonMappings = mutableMapOf(
         MouseButton.LEFT to { event: MouseEvent ->  },
-        MouseButton.RIGHT to { event: MouseEvent -> UIMain.player!!.targetX = event.x; UIMain.player!!.targetY = event.y }
+        MouseButton.RIGHT to { event: MouseEvent -> UIMain.player!!.targetX = event.x-50; UIMain.player!!.targetY = event.y-50 }
     )
 
     fun handleInput(type: Key){

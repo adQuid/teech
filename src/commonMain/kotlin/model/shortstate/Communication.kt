@@ -6,10 +6,12 @@ import com.soywiz.korge.view.View
 
 class Communication: Entity {
 
-    var age = 0;
+    var age = 0
+    val speaker: ShortStateCharacter
     val message: String
 
-    constructor(origin: Coordinate, message: String): super(origin, "korge.png"){
+    constructor(origin: Coordinate, speaker: ShortStateCharacter, message: String): super(origin, "korge.png"){
+        this.speaker = speaker
         this.message = message
     }
 
