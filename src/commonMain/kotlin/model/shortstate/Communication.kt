@@ -6,6 +6,7 @@ import com.soywiz.korge.view.View
 
 class Communication: Entity {
 
+    var age = 0;
     val message = "Sweet Caroline"
 
     constructor(origin: Coordinate): super(origin, "korge.png"){

@@ -60,6 +60,10 @@ object UIMain {
 
                 addChildAt(entityMap[it]!!, i++)
             }
+
+            entityMap.keys.filter { !entityList.contains(it) }.forEach {
+                entityMap[it]!!.removeFromParent()
+            }
         }
 
         while(true){
