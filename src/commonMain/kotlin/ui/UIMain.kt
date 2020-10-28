@@ -3,6 +3,7 @@ package ui
 import com.soywiz.klock.milliseconds
 import com.soywiz.korge.Korge
 import com.soywiz.korge.input.onClick
+import com.soywiz.korge.input.onKeyDown
 import com.soywiz.korge.input.onKeyUp
 import com.soywiz.korge.time.delay
 import com.soywiz.korge.tween.get
@@ -15,6 +16,7 @@ import com.soywiz.korio.async.launchImmediately
 import com.soywiz.korio.file.std.resourcesVfs
 import com.soywiz.korma.geom.degrees
 import com.soywiz.korma.interpolation.Easing
+import controller.ShortStateController
 import model.shortstate.*
 import kotlin.math.max
 import kotlin.math.min
@@ -29,12 +31,16 @@ object UIMain {
     val charactersBeingDrawn = mutableMapOf<ShortStateCharacter, View>()
     val communicationsBeingDrawn = mutableMapOf<Communication, View>()
 
+    var player: ShortStateCharacter? = null
+
     suspend fun makeUI() = Korge(width = width, height = height, bgcolor = Colors["#2b2b2b"]) {
+        var clicks = 1
         onClick{
+            println(clicks++)
             InputHandler.handleInput(it.lastEvent)
         }
 
-        onKeyUp {
+        onKeyDown {
             InputHandler.handleInput(it.key)
         }
 
@@ -42,6 +48,8 @@ object UIMain {
         label.y = 400.0
         label.onClick { println("button pressed") }
         addChild(label)
+
+        player = ShortStateController.activeShortGame.characters[0]
 
         suspend fun <T: Entity> addEntities(entityList: Collection<T>, entityMap: MutableMap<T, View>, startIndex: Int){
             var i = startIndex
@@ -57,25 +65,24 @@ object UIMain {
         while(true){
             delay(frameDelay.milliseconds)
 
-            addEntities(ShortGame.characters, charactersBeingDrawn, 0)
-            addEntities(ShortGame.communications, communicationsBeingDrawn, charactersBeingDrawn.size)
+            addEntities(ShortStateController.activeShortGame.characters, charactersBeingDrawn, 0)
+            addEntities(ShortStateController.activeShortGame.communications, communicationsBeingDrawn, charactersBeingDrawn.size)
 
-            charactersBeingDrawn.filter{it.key.targetX != null && it.value.x != it.key.targetX!!.toDouble()}.forEach {
+            charactersBeingDrawn.filter{it.key.location.x != null && it.value.x != it.key.location.x.toDouble()}.forEach {
                 val image = it.value
 
                 val pixelsToMove = 100 * frameDelay / 1000
 
                 var newX =
-                        if(it.value.x > it.key.targetX!!.toDouble()){
-                            max(it.value.x - pixelsToMove, it.key.targetX!!.toDouble())
-                        } else if(it.value.x < it.key.targetX!!.toDouble()){
-                            min(it.value.x + pixelsToMove, it.key.targetX!!.toDouble())
+                        if(it.value.x > it.key.location.x!!.toDouble()){
+                            max(it.value.x - pixelsToMove, it.key.location.x!!.toDouble())
+                        } else if(it.value.x < it.key.location.x!!.toDouble()){
+                            min(it.value.x + pixelsToMove, it.key.location.x!!.toDouble())
                         } else {
                             it.value.x
                         }
 
                 if(newX != it.value.x){
-                    it.key.location = Coordinate(newX.toInt(), it.key.location.y)
                     launchImmediately {
                         image.tween(image::x[image.x, newX], time = frameDelay.milliseconds, easing = Easing.LINEAR)
                     }

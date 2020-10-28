@@ -1,19 +1,24 @@
 import com.soywiz.korev.Key
 import com.soywiz.korev.MouseButton
 import com.soywiz.korev.MouseEvent
+import controller.ShortStateController
 import model.shortstate.Communication
 import model.shortstate.Coordinate
 import model.shortstate.ShortGame
+import ui.UIMain
 
 object InputHandler {
 
     val keyPressMappings = mutableMapOf(
-        Key.T to { ShortGame.communications.add(Communication(Coordinate(ShortGame.characters[0].location.x,ShortGame.characters[0].location.y))) }
+        Key.T to { ShortStateController.activeShortGame.communications
+                .add(Communication(Coordinate(UIMain.player!!.location.x,UIMain.player!!.location.y))) },
+        Key.A to {UIMain.player!!.targetX = UIMain.player!!.location.x - 50},
+        Key.D to {UIMain.player!!.targetX = UIMain.player!!.location.x + 50}
     )
 
     val mouseButtonMappings = mutableMapOf(
-        MouseButton.LEFT to { event: MouseEvent -> ShortGame.characters[0]!!.targetX = event.x },
-        MouseButton.RIGHT to { event: MouseEvent -> ShortGame.characters[0]!!.targetY = event.y }
+        MouseButton.LEFT to { event: MouseEvent ->  },
+        MouseButton.RIGHT to { event: MouseEvent -> UIMain.player!!.targetX = event.x; UIMain.player!!.targetY = event.y }
     )
 
     fun handleInput(type: Key){

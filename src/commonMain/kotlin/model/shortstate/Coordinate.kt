@@ -2,8 +2,8 @@ package model.shortstate
 
 class Coordinate {
 
-    val x: Int
-    val y: Int
+    var x: Int
+    var y: Int
 
     constructor(x: Int, y:Int){
         this.x = x

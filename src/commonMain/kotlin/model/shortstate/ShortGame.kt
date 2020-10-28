@@ -1,6 +1,6 @@
 package model.shortstate
 
-object ShortGame {
+class ShortGame {
 
     val characters = listOf(ShortStateCharacter(1, "armored ekf.png", 200, 500),
             ShortStateCharacter(2, "old bard.png", 600, 300),
