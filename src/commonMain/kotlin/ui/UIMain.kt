@@ -1,21 +1,16 @@
 package ui
 
+import com.soywiz.kds.Stack
 import com.soywiz.klock.milliseconds
 import com.soywiz.korge.Korge
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.input.onKeyDown
-import com.soywiz.korge.input.onKeyUp
 import com.soywiz.korge.time.delay
 import com.soywiz.korge.tween.get
 import com.soywiz.korge.tween.tween
-import com.soywiz.korge.ui.TextButton
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.async.async
-import com.soywiz.korio.async.launchImmediately
-import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korma.geom.degrees
 import com.soywiz.korma.interpolation.Easing
 import controller.ShortStateController
 import model.shortstate.*
@@ -31,8 +26,15 @@ object UIMain {
 
     val charactersBeingDrawn = mutableMapOf<ShortStateCharacter, View>()
     val communicationsBeingDrawn = mutableMapOf<Communication, View>()
+    val menuOverlays = Stack<UILayer>()
 
     var player: ShortStateCharacter? = null
+
+    fun defocus(){
+        if(menuOverlays.isNotEmpty()){
+            menuOverlays.pop()
+        }
+    }
 
     suspend fun makeUI() = Korge(width = width, height = height, bgcolor = Colors["#2b2b2b"]) {
         onClick{
@@ -43,12 +45,15 @@ object UIMain {
             InputHandler.handleInput(it.key)
         }
 
-        val label = TextButton(256.0, 32.0, "Enabled Button")
-        label.y = 400.0
-        label.onClick { println("button pressed") }
-        addChild(label)
-
         player = ShortStateController.activeShortGame.characters[0]
+
+        fun allViewsThatShouldBeHere(): Collection<View>{
+            if(menuOverlays.peek() != null){
+                return charactersBeingDrawn.values + communicationsBeingDrawn.values + menuOverlays.peek()!!.views()
+            } else {
+                return charactersBeingDrawn.values + communicationsBeingDrawn.values
+            }
+        }
 
         suspend fun <T: Entity> addEntities(entityList: Collection<T>, entityMap: MutableMap<T, View>, startIndex: Int){
             var i = startIndex
@@ -60,17 +65,23 @@ object UIMain {
 
                 addChildAt(entityMap[it]!!, i++)
             }
-
-            entityMap.keys.filter { !entityList.contains(it) }.forEach {
-                entityMap[it]!!.removeFromParent()
-            }
-        }
+                    }
 
         while(true){
             delay(frameDelay.milliseconds)
 
             addEntities(ShortStateController.activeShortGame.characters, charactersBeingDrawn, 0)
             addEntities(ShortStateController.activeShortGame.communications, communicationsBeingDrawn, charactersBeingDrawn.size)
+            if(menuOverlays.peek() != null){
+                var i = 0
+                menuOverlays.peek()!!.views().filter { !children.contains(it) }.forEach {
+                    addChildAt(it, charactersBeingDrawn.size + communicationsBeingDrawn.size + i)
+                }
+            }
+
+            children.filter{!allViewsThatShouldBeHere().contains(it)}.forEach{
+                it.removeFromParent()
+            }
 
             charactersBeingDrawn.filter{(it.key.location.x != null && it.value.x != it.key.location.x.toDouble()) || (it.key.location.y != null && it.value.y != it.key.location.y.toDouble())}
                     .forEach {

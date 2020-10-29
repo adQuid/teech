@@ -1,20 +1,23 @@
 import com.soywiz.korev.Key
 import com.soywiz.korev.MouseButton
 import com.soywiz.korev.MouseEvent
+import com.soywiz.korge.ui.TextButton
 import controller.ShortStateController
 import model.shortstate.Communication
 import model.shortstate.Coordinate
 import model.shortstate.ShortGame
 import ui.UIMain
+import ui.uilayers.DialogMenu
 
 object InputHandler {
 
     val keyPressMappings = mutableMapOf(
-        Key.T to { UIMain.player!!.say("Sweet Caroline") },
+        Key.T to { UIMain.menuOverlays.push(DialogMenu()) },
         Key.A to {UIMain.player!!.targetX = UIMain.player!!.location.x - 50},
         Key.D to {UIMain.player!!.targetX = UIMain.player!!.location.x + 50},
         Key.S to {UIMain.player!!.targetY = UIMain.player!!.location.y + 50},
-        Key.W to {UIMain.player!!.targetY = UIMain.player!!.location.y - 50}
+        Key.W to {UIMain.player!!.targetY = UIMain.player!!.location.y - 50},
+        Key.ESCAPE to {UIMain.defocus()}
     )
 
     val mouseButtonMappings = mutableMapOf(
