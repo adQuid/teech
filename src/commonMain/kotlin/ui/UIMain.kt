@@ -1,7 +1,9 @@
 package ui
 
+import InputHandler
 import com.soywiz.kds.Stack
 import com.soywiz.klock.milliseconds
+import com.soywiz.korev.Key
 import com.soywiz.korge.Korge
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.input.onKeyDown
@@ -28,6 +30,8 @@ object UIMain {
     val communicationsBeingDrawn = mutableMapOf<Communication, View>()
     val menuOverlays = Stack<UILayer>()
 
+    val baseInputHandler = InputHandler()
+
     var player: ShortStateCharacter? = null
 
     fun defocus(){
@@ -38,11 +42,23 @@ object UIMain {
 
     suspend fun makeUI() = Korge(width = width, height = height, bgcolor = Colors["#2b2b2b"]) {
         onClick{
-            InputHandler.handleInput(it.lastEvent)
+            if(menuOverlays.isNotEmpty()){
+                menuOverlays.peek()!!.inputHandler.handleInput(it.lastEvent)
+            } else {
+                baseInputHandler.handleInput(it.lastEvent)
+            }
         }
 
         onKeyDown {
-            InputHandler.handleInput(it.key)
+            if(it.key == Key.ESCAPE){
+                defocus()
+            } else {
+                if(menuOverlays.isNotEmpty()){
+                    menuOverlays.peek()!!.inputHandler.handleInput(it.key)
+                } else {
+                    baseInputHandler.handleInput(it.key)
+                }
+            }
         }
 
         player = ShortStateController.activeShortGame.characters[0]
@@ -65,7 +81,11 @@ object UIMain {
 
                 addChildAt(entityMap[it]!!, i++)
             }
-                    }
+
+            entityMap.filter{!entityList.contains(it.key)}.forEach {
+                entityMap.remove(it.key)
+            }
+        }
 
         while(true){
             delay(frameDelay.milliseconds)

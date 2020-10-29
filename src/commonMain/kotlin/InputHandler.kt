@@ -9,21 +9,32 @@ import model.shortstate.ShortGame
 import ui.UIMain
 import ui.uilayers.DialogMenu
 
-object InputHandler {
+class InputHandler {
 
-    val keyPressMappings = mutableMapOf(
+    companion object{
+        val defaultKeys = mutableMapOf(
         Key.T to { UIMain.menuOverlays.push(DialogMenu()) },
         Key.A to {UIMain.player!!.targetX = UIMain.player!!.location.x - 50},
         Key.D to {UIMain.player!!.targetX = UIMain.player!!.location.x + 50},
         Key.S to {UIMain.player!!.targetY = UIMain.player!!.location.y + 50},
-        Key.W to {UIMain.player!!.targetY = UIMain.player!!.location.y - 50},
-        Key.ESCAPE to {UIMain.defocus()}
-    )
+        Key.W to {UIMain.player!!.targetY = UIMain.player!!.location.y - 50}
+        )
 
-    val mouseButtonMappings = mutableMapOf(
-        MouseButton.LEFT to { event: MouseEvent ->  },
-        MouseButton.RIGHT to { event: MouseEvent -> UIMain.player!!.targetX = event.x-50; UIMain.player!!.targetY = event.y-50 }
-    )
+        val defaultMouse = mutableMapOf(
+                MouseButton.LEFT to { event: MouseEvent ->  },
+                MouseButton.RIGHT to { event: MouseEvent -> UIMain.player!!.targetX = event.x-50; UIMain.player!!.targetY = event.y-50 }
+        )
+    }
+
+    val keyPressMappings: MutableMap<Key, () -> Any>
+
+    val mouseButtonMappings: MutableMap<MouseButton, (event: MouseEvent) -> Unit>
+
+    constructor(keyPressMappings: MutableMap<Key, () -> Any> = defaultKeys,
+                mouseButtonMappings: MutableMap<MouseButton, (event: MouseEvent) -> Unit> = defaultMouse){
+        this.keyPressMappings = keyPressMappings
+        this.mouseButtonMappings = mouseButtonMappings
+    }
 
     fun handleInput(type: Key){
         if(keyPressMappings.containsKey(type)){

@@ -17,7 +17,7 @@ class ConversationAI {
     }
 
     fun respondToLine(communication: Communication){
-        if(communication.message.contains("Sweet")){
+        if(communication.message.toLowerCase().contains("sweet")){
             parent.say("Bah Bah Bah")
         }
     }
