@@ -21,8 +21,8 @@ import kotlin.math.min
 
 object UIMain {
 
-    var width = 1024
-    var height = 1024
+    var width = 924
+    var height = 924
 
     var frameDelay = 20
 

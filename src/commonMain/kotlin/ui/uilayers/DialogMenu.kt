@@ -6,6 +6,8 @@ import com.soywiz.korge.ui.TextButton
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korma.geom.Rectangle
+import model.shortstate.Message
+import model.shortstate.MessageFactory
 import ui.UILayer
 import ui.UIMain
 import ui.customkorge.TextInput
@@ -61,12 +63,12 @@ class DialogMenu: UILayer {
     }
 
     fun updateText(text: String){
-        dialogTags = text.split(" ").mapIndexed{
-            index: Int, s: String ->
+        dialogTags = Message.messageListFromString(text).mapIndexed{
+            index: Int, s: Message ->
             val retval = RoundRect(350.0, 50.0, 5.0)
             retval.color = RGBA.Companion.float(0.0, 0.8, 0.0, 1.0)
             retval.y = UIMain.height - ((index+1) * 50.0) - textInput.height
-            val textLabel = Text(s).centerOn(retval)
+            val textLabel = Text(s.tooltip()).centerOn(retval)
             textLabel.x = retval.x + 5
             textLabel.y = retval.y + retval.height/3
 

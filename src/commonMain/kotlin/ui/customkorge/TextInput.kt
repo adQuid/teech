@@ -29,9 +29,6 @@ class TextInput(
         this.text = text
         textView.setTextBounds(Rectangle(10, height * 0.45, width, height))
         textView.setText(text)
-        if(text.contains("Sweet")){
-            println("bah bah bah")
-        }
     }
 
 }

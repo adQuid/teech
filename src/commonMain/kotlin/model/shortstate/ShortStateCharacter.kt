@@ -44,6 +44,6 @@ class ShortStateCharacter: Entity {
 
     fun say(message: String){
         ShortStateController.activeShortGame.communications
-                .add(Communication(Coordinate(location.x, location.y - 10), this, message))
+                .add(Communication(Coordinate(location.x, location.y - 10), this, message, Message.messageListFromString(message)))
     }
 }
