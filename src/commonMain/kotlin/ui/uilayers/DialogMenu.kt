@@ -45,7 +45,7 @@ class DialogMenu: UILayer {
         Key.BACKSPACE to { if(textInput.text.isNotEmpty()){this.updateText(textInput.text.substring(0..textInput.text.length-2))} },
         Key.ENTER to { UIMain.player!!.say(textInput.text); UIMain.defocus() }
     ))
-    val textInput = TextInput(width = UIMain.width.toDouble())
+    val textInput = TextInput(width = UIMain.width * 0.8)
 
     var dialogTags = listOf<View>()
 
@@ -72,7 +72,7 @@ class DialogMenu: UILayer {
             textLabel.x = retval.x + 5
             textLabel.y = retval.y + retval.height/3
 
-            listOf(textLabel, retval)
+            listOf(retval, textLabel)
         }.flatten()
         this.textInput.updateText(text)
 

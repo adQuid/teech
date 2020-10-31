@@ -1,9 +1,12 @@
 package model.shortstate
 
 import ai.ConversationAI
+import com.soywiz.korev.MouseButton
+import com.soywiz.korge.input.onClick
 import com.soywiz.korge.view.Container
 import com.soywiz.korge.view.Image
 import com.soywiz.korge.view.View
+import com.soywiz.korge.view.image
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import controller.ShortStateController
@@ -15,6 +18,8 @@ class ShortStateCharacter: Entity {
 
     var targetX: Int? = null
     var targetY: Int? = null
+
+    private var targetCharacter: ShortStateCharacter? = null
 
     val convoAI: ConversationAI
 
@@ -39,11 +44,35 @@ class ShortStateCharacter: Entity {
     }
 
     override suspend fun display(): View {
-        return Image(resourcesVfs[image].readBitmap())
+        println("displaying")
+        val retval = Image(resourcesVfs[image].readBitmap())
+        if(UIMain.player!!.targetCharacter == this){
+            retval.image(resourcesVfs["target.png"].readBitmap())
+        }
+        retval.onClick { mouseEvents -> if(mouseEvents.lastEvent.button == MouseButton.LEFT){ UIMain.player!!.target(this) }}
+        return retval
     }
 
     fun say(message: String){
         ShortStateController.activeShortGame.communications
                 .add(Communication(Coordinate(location.x, location.y - 10), this, message, Message.messageListFromString(message)))
+    }
+
+    fun getTarget(): ShortStateCharacter?{
+        return targetCharacter
+    }
+
+    fun target(target: ShortStateCharacter?){
+        if(UIMain.player == this){
+            UIMain.needToUpdateTargetView = true
+            if(targetCharacter != null){
+                targetCharacter!!.needsRedraw = true
+            }
+            if(target != null){
+                target.needsRedraw = true
+            }
+        }
+        this.targetCharacter = target
+
     }
 }

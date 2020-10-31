@@ -12,7 +12,9 @@ import com.soywiz.korge.tween.get
 import com.soywiz.korge.tween.tween
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.Colors
+import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.async.async
+import com.soywiz.korio.file.std.resourcesVfs
 import com.soywiz.korma.interpolation.Easing
 import controller.ShortStateController
 import model.shortstate.*
@@ -28,6 +30,10 @@ object UIMain {
 
     val charactersBeingDrawn = mutableMapOf<ShortStateCharacter, View>()
     val communicationsBeingDrawn = mutableMapOf<Communication, View>()
+
+    var needToUpdateTargetView = false
+    var targetViews = setOf<View>()
+
     val menuOverlays = Stack<UILayer>()
 
     val baseInputHandler = InputHandler()
@@ -64,17 +70,24 @@ object UIMain {
         player = ShortStateController.activeShortGame.characters[0]
 
         fun allViewsThatShouldBeHere(): Collection<View>{
+            var retval = charactersBeingDrawn.values + communicationsBeingDrawn.values + targetViews
             if(menuOverlays.peek() != null){
-                return charactersBeingDrawn.values + communicationsBeingDrawn.values + menuOverlays.peek()!!.views()
-            } else {
-                return charactersBeingDrawn.values + communicationsBeingDrawn.values
+                retval += menuOverlays.peek()!!.views()
             }
+
+            return retval
         }
 
         suspend fun <T: Entity> addEntities(entityList: Collection<T>, entityMap: MutableMap<T, View>, startIndex: Int){
             var i = startIndex
 
-            entityList.filter{!entityMap.keys.contains(it as Entity)}.forEach{
+            entityList.filter{it.needsRedraw}.forEach {
+                println("found something that needs redraw")
+                it.needsRedraw = false
+                entityMap.remove(it)
+            }
+
+            entityList.filter{!entityMap.keys.contains(it as Entity) || it.needsRedraw}.forEach{
                 entityMap[it] = it.display()
                 entityMap[it]!!.position(it.location.x, it.location.y)
                 entityMap[it]!!.scale = 0.8
@@ -87,15 +100,39 @@ object UIMain {
             }
         }
 
+        suspend fun updateTargetView(){
+            if(player != null && player!!.getTarget() != null){
+                val targetProfile = Image(resourcesVfs[player!!.getTarget()!!.image].readBitmap())
+                targetProfile.x = width * 0.8
+                targetProfile.y = height - (width * 0.2)
+                targetProfile.width = width * 0.2
+                targetProfile.height = width * 0.2
+
+                targetViews = setOf(
+                        targetProfile
+                )
+            } else {
+                targetViews = setOf()
+            }
+        }
+
         while(true){
             delay(frameDelay.milliseconds)
 
+            if(player != null && needToUpdateTargetView){
+                    updateTargetView()
+            }
+
             addEntities(ShortStateController.activeShortGame.characters, charactersBeingDrawn, 0)
             addEntities(ShortStateController.activeShortGame.communications, communicationsBeingDrawn, charactersBeingDrawn.size)
+
+            var i = 0
+            targetViews.forEach{
+                addChildAt(it, charactersBeingDrawn.size + communicationsBeingDrawn.size + i++)
+            }
             if(menuOverlays.peek() != null){
-                var i = 0
                 menuOverlays.peek()!!.views().filter { !children.contains(it) }.forEach {
-                    addChildAt(it, charactersBeingDrawn.size + communicationsBeingDrawn.size + i)
+                    addChildAt(it, charactersBeingDrawn.size + communicationsBeingDrawn.size + i++)
                 }
             }
 

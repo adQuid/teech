@@ -21,7 +21,7 @@ class InputHandler {
         )
 
         val defaultMouse = mutableMapOf(
-                MouseButton.LEFT to { event: MouseEvent ->  },
+                MouseButton.LEFT to { event: MouseEvent -> UIMain.player!!.target(null) },
                 MouseButton.RIGHT to { event: MouseEvent -> UIMain.player!!.targetX = event.x-50; UIMain.player!!.targetY = event.y-50 }
         )
     }
