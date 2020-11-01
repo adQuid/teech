@@ -53,9 +53,9 @@ class ShortStateCharacter: Entity {
         return retval
     }
 
-    fun say(message: String){
+    fun say(message: String, target: ShortStateCharacter? = null){
         ShortStateController.activeShortGame.communications
-                .add(Communication(Coordinate(location.x, location.y - 10), this, message, Message.messageListFromString(message)))
+                .add(Communication(Coordinate(location.x, location.y - 10), this, target, message, Message.messageListFromString(message)))
     }
 
     fun getTarget(): ShortStateCharacter?{

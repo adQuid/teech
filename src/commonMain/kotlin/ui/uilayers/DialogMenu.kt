@@ -43,7 +43,7 @@ class DialogMenu: UILayer {
         Key.Z to { this.updateText(textInput.text + "Z") },
         Key.SPACE to { this.updateText(textInput.text + " ") },
         Key.BACKSPACE to { if(textInput.text.isNotEmpty()){this.updateText(textInput.text.substring(0..textInput.text.length-2))} },
-        Key.ENTER to { UIMain.player!!.say(textInput.text); UIMain.defocus() }
+        Key.ENTER to { UIMain.player!!.say(textInput.text, UIMain.player!!.getTarget()); UIMain.defocus() }
     ))
     val textInput = TextInput(width = UIMain.width * 0.8)
 

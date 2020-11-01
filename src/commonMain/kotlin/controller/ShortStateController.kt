@@ -34,8 +34,8 @@ object ShortStateController {
             }
 
             activeShortGame.communications.filter{it.age == 50}.forEach{communication ->
-                activeShortGame.charactersInRange(communication.location, 400).filter { communication.speaker != it }.forEach { recipient ->
-                    recipient.convoAI.respondToLine(communication)
+                activeShortGame.charactersInRange(communication.location, 400).forEach { recipient ->
+                    recipient.convoAI.hear(communication)
                 }
             }
             activeShortGame.communications.forEach { it.age++ }

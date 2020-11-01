@@ -15,6 +15,7 @@ import com.soywiz.korim.color.Colors
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.async.async
 import com.soywiz.korio.file.std.resourcesVfs
+import com.soywiz.korma.geom.Rectangle
 import com.soywiz.korma.interpolation.Easing
 import controller.ShortStateController
 import model.shortstate.*
@@ -101,6 +102,7 @@ object UIMain {
         }
 
         suspend fun updateTargetView(){
+            needToUpdateTargetView = false
             if(player != null && player!!.getTarget() != null){
                 val targetProfile = Image(resourcesVfs[player!!.getTarget()!!.image].readBitmap())
                 targetProfile.x = width * 0.8
@@ -108,8 +110,18 @@ object UIMain {
                 targetProfile.width = width * 0.2
                 targetProfile.height = width * 0.2
 
+                val textWindow = Image(resourcesVfs["textbox.png"].readBitmap())
+                textWindow.x = 0.0
+                textWindow.y = height * 0.8
+                textWindow.width = width * 0.8
+                textWindow.height = height * 0.2
+                val text = textWindow.text(player!!.convoAI.lastThingSaidToMe(player!!.getTarget()))
+                text.y = height * 0.01
+                text.x = width * 0.01
+
                 targetViews = setOf(
-                        targetProfile
+                    targetProfile,
+                    textWindow
                 )
             } else {
                 targetViews = setOf()
