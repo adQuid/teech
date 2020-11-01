@@ -1,8 +1,11 @@
 package controller
 
 import kotlinx.coroutines.delay
+import model.shortstate.Coordinate
 import model.shortstate.ShortGame
 import ui.UIMain
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 object ShortStateController {
 
@@ -15,21 +18,16 @@ object ShortStateController {
 
             val pixelsToMove = 100 * UIMain.frameDelay / 1000
             activeShortGame.characters.forEach {
-                if(it.targetX != null){
-                    if(it.targetX!! > it.location.x){
-                        it.location.x += pixelsToMove
+                if(it.targetX != null && it.targetY!= null){
+                    val xToMove = it.targetX!! - it.location.x
+                    val yToMove = it.targetY!! - it.location.y
+
+                    val totalDistance = sqrt(((xToMove * xToMove) + (yToMove * yToMove)).toDouble())
+
+                    if(abs(xToMove) + abs(yToMove) > 5){
+                        it.move(xToMove/totalDistance*pixelsToMove, yToMove/totalDistance*pixelsToMove)
                     }
-                    if(it.targetX!! < it.location.x){
-                        it.location.x -= pixelsToMove
-                    }
-                }
-                if(it.targetY != null){
-                    if(it.targetY!! > it.location.y){
-                        it.location.y += pixelsToMove
-                    }
-                    if(it.targetY!! < it.location.y){
-                        it.location.y -= pixelsToMove
-                    }
+
                 }
             }
 

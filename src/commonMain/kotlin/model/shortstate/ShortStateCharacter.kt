@@ -75,4 +75,12 @@ class ShortStateCharacter: Entity {
         this.targetCharacter = target
 
     }
+
+    fun move(x: Double, y: Double){
+        location = location.plus(Coordinate(x.toInt(), y.toInt()))
+        if(UIMain.charactersBeingDrawn.containsKey(this)){
+            UIMain.charactersBeingDrawn[this]!!.x = location.x.toDouble()
+            UIMain.charactersBeingDrawn[this]!!.y = location.y.toDouble()
+        }
+    }
 }

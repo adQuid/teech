@@ -83,12 +83,14 @@ object UIMain {
             var i = startIndex
 
             entityList.filter{it.needsRedraw}.forEach {
-                println("found something that needs redraw")
+                entityMap[it] = it.display()
+                entityMap[it]!!.position(it.location.x, it.location.y)
+                entityMap[it]!!.scale = 0.8
+                addChildAt(entityMap[it]!!, i++)
                 it.needsRedraw = false
-                entityMap.remove(it)
             }
 
-            entityList.filter{!entityMap.keys.contains(it as Entity) || it.needsRedraw}.forEach{
+            entityList.filter{!entityMap.keys.contains(it as Entity)}.forEach{
                 entityMap[it] = it.display()
                 entityMap[it]!!.position(it.location.x, it.location.y)
                 entityMap[it]!!.scale = 0.8

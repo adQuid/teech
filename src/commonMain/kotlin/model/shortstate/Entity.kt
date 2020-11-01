@@ -1,6 +1,7 @@
 package model.shortstate
 
 import com.soywiz.korge.view.View
+import ui.UIMain
 
 abstract class Entity {
 
