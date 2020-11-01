@@ -14,10 +14,10 @@ class InputHandler {
     companion object{
         val defaultKeys = mutableMapOf(
         Key.T to { UIMain.menuOverlays.push(DialogMenu()) },
-        Key.A to {UIMain.player!!.targetX = UIMain.player!!.location.x - 50},
-        Key.D to {UIMain.player!!.targetX = UIMain.player!!.location.x + 50},
-        Key.S to {UIMain.player!!.targetY = UIMain.player!!.location.y + 50},
-        Key.W to {UIMain.player!!.targetY = UIMain.player!!.location.y - 50}
+        Key.A to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x - 50, UIMain.player!!.location.y))},
+        Key.D to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x + 50, UIMain.player!!.location.y))},
+        Key.S to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x, UIMain.player!!.location.y + 50))},
+        Key.W to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x, UIMain.player!!.location.y - 50))}
         )
 
         val defaultMouse = mutableMapOf(
