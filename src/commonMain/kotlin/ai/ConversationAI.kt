@@ -5,6 +5,7 @@ import model.shortstate.Communication
 import model.shortstate.Coordinate
 import model.shortstate.Message
 import model.shortstate.ShortStateCharacter
+import model.shortstate.messagetypes.GivePerspective
 import model.shortstate.messagetypes.Greeting
 import model.shortstate.messagetypes.RequestPerspective
 import model.shortstate.messagetypes.SweetCaroline
@@ -29,6 +30,7 @@ class ConversationAI {
         if(UIMain.player == parent){
             UIMain.needToUpdateTargetView = true
         } else if(communication.speaker != parent && UIMain.player != parent){
+            println("responding to line")
             respondToLine(communication)
         }
     }
@@ -37,6 +39,14 @@ class ConversationAI {
         communication.messages.forEach{
             if(it is SweetCaroline){
                 parent.say("Bah Bah Bah")
+            }
+            if(it is GivePerspective){
+                val myPerspective = parent.longCharacter.culture.perspectiveOn(it.perspective.topic)
+                if(myPerspective != null){
+                    if(it.perspective.opinion - parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.opinion > 50){
+                        parent.say(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, listOf(GivePerspective(myPerspective)), null)
+                    }
+                }
             }
             if(communication.target == parent){
                 if(it is Greeting){
@@ -47,8 +57,9 @@ class ConversationAI {
                     }
                 }
                 if(it is RequestPerspective){
-                    if(parent.longCharacter.culture.perspectiveOn(it.perspective.topic) != null){
-                        parent.say(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text)
+                    val myPerspective = parent.longCharacter.culture.perspectiveOn(it.perspective.topic)
+                    if(myPerspective != null){
+                        parent.say(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, listOf(GivePerspective(myPerspective)), null)
                     } else {
                         parent.say("Huh, I've never heard about that.")
                     }

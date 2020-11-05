@@ -9,7 +9,13 @@ object RequestPerspectiveFactory: MessageFactory() {
     override fun generateMessages(text: String): List<Message> {
         val allTopics = LongStateController.activeLongGame.cultures.flatMap { it.perspectives.map { it.topic } }
 
-        return allTopics.filter { text.contains("$it?") }.map { RequestPerspective(Perspective(it, 0, text)) }
+        val results = allTopics.filter { text.contains("$it?") }.map { RequestPerspective(Perspective(it, 0, text)) }
+
+        if(results.size > 1){
+            return results.subList(0,1)
+        } else {
+            return results
+        }
     }
 
 }

@@ -6,10 +6,18 @@ import model.shortstate.Message
 import model.shortstate.MessageFactory
 
 object GivePerspectiveFactory: MessageFactory() {
+    val goodWords = listOf("lovely", "good", "nice")
+
     override fun generateMessages(text: String): List<Message> {
         val allTopics = LongStateController.activeLongGame.cultures.flatMap { it.perspectives.map { it.topic } }
 
-        return allTopics.filter { text.contains(Regex("$it[ .,;:]")) }.map { GivePerspective(Perspective(it, 0, text)) }
+        val results = allTopics.filter { text.contains(Regex("$it[ .,;:]")) }.map { GivePerspective(Perspective(it, 0, text)) }
+
+        if(results.size > 1){
+            return results.subList(0,1)
+        } else {
+            return results
+        }
     }
 
 }
