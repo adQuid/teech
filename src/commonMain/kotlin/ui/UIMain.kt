@@ -7,6 +7,7 @@ import com.soywiz.korev.Key
 import com.soywiz.korge.Korge
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.input.onKeyDown
+import com.soywiz.korge.input.onKeyUp
 import com.soywiz.korge.time.delay
 import com.soywiz.korge.tween.get
 import com.soywiz.korge.tween.tween
@@ -41,6 +42,8 @@ object UIMain {
 
     var player: ShortStateCharacter? = null
 
+    var shiftDown = false
+
     fun defocus(){
         if(menuOverlays.isNotEmpty()){
             menuOverlays.pop()
@@ -49,6 +52,7 @@ object UIMain {
 
     suspend fun makeUI() = Korge(width = width, height = height, bgcolor = Colors["#2b2b2b"]) {
         onClick{
+            it.isShiftDown
             if(menuOverlays.isNotEmpty()){
                 menuOverlays.peek()!!.inputHandler.handleInput(it.lastEvent)
             } else {
@@ -57,14 +61,23 @@ object UIMain {
         }
 
         onKeyDown {
+            if(it.key == Key.LEFT_SHIFT || it.key == Key.RIGHT_SHIFT){
+                shiftDown = true
+            }
             if(it.key == Key.ESCAPE){
                 defocus()
             } else {
                 if(menuOverlays.isNotEmpty()){
-                    menuOverlays.peek()!!.inputHandler.handleInput(it.key)
+                    menuOverlays.peek()!!.inputHandler.handleInput(it)
                 } else {
-                    baseInputHandler.handleInput(it.key)
+                    baseInputHandler.handleInput(it)
                 }
+            }
+        }
+
+        onKeyUp {
+            if(it.key == Key.LEFT_SHIFT || it.key == Key.RIGHT_SHIFT){
+                shiftDown = false
             }
         }
 

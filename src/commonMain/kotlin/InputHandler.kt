@@ -1,4 +1,5 @@
 import com.soywiz.korev.Key
+import com.soywiz.korev.KeyEvent
 import com.soywiz.korev.MouseButton
 import com.soywiz.korev.MouseEvent
 import com.soywiz.korge.ui.TextButton
@@ -13,11 +14,11 @@ class InputHandler {
 
     companion object{
         val defaultKeys = mutableMapOf(
-        Key.T to { UIMain.menuOverlays.push(DialogMenu()) },
-        Key.A to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x - 50, UIMain.player!!.location.y))},
-        Key.D to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x + 50, UIMain.player!!.location.y))},
-        Key.S to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x, UIMain.player!!.location.y + 50))},
-        Key.W to {UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x, UIMain.player!!.location.y - 50))}
+        Key.T to { event: KeyEvent -> UIMain.menuOverlays.push(DialogMenu()) },
+        Key.A to { event: KeyEvent -> UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x - 50, UIMain.player!!.location.y))},
+        Key.D to { event: KeyEvent -> UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x + 50, UIMain.player!!.location.y))},
+        Key.S to { event: KeyEvent -> UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x, UIMain.player!!.location.y + 50))},
+        Key.W to { event: KeyEvent -> UIMain.player!!.setTargetPosition(Coordinate(UIMain.player!!.location.x, UIMain.player!!.location.y - 50))}
         )
 
         val defaultMouse = mutableMapOf(
@@ -26,19 +27,20 @@ class InputHandler {
         )
     }
 
-    val keyPressMappings: MutableMap<Key, () -> Any>
+    val keyPressMappings: MutableMap<Key, (event: KeyEvent) -> Any>
 
     val mouseButtonMappings: MutableMap<MouseButton, (event: MouseEvent) -> Unit>
 
-    constructor(keyPressMappings: MutableMap<Key, () -> Any> = defaultKeys,
+    constructor(keyPressMappings: MutableMap<Key, (event: KeyEvent) -> Any> = defaultKeys,
                 mouseButtonMappings: MutableMap<MouseButton, (event: MouseEvent) -> Unit> = defaultMouse){
         this.keyPressMappings = keyPressMappings
         this.mouseButtonMappings = mouseButtonMappings
     }
 
-    fun handleInput(type: Key){
+    fun handleInput(event: KeyEvent){
+        val type = event.key
         if(keyPressMappings.containsKey(type)){
-            keyPressMappings[type]!!()
+            keyPressMappings[type]!!(event)
         } else {
             println("unbound button pressed: ${type}")
         }

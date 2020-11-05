@@ -2,6 +2,7 @@ package ui.uilayers
 
 import InputHandler
 import com.soywiz.korev.Key
+import com.soywiz.korev.KeyEvent
 import com.soywiz.korge.ui.TextButton
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.RGBA
@@ -15,37 +16,37 @@ import ui.customkorge.TextInput
 class DialogMenu: UILayer {
 
     override val inputHandler = InputHandler(keyPressMappings = mutableMapOf(
-        Key.A to { this.updateText(textInput.text + "A") },
-        Key.B to { this.updateText(textInput.text + "B") },
-        Key.C to { this.updateText(textInput.text + "C") },
-        Key.D to { this.updateText(textInput.text + "D") },
-        Key.E to { this.updateText(textInput.text + "E") },
-        Key.F to { this.updateText(textInput.text + "F") },
-        Key.G to { this.updateText(textInput.text + "G") },
-        Key.H to { this.updateText(textInput.text + "H") },
-        Key.I to { this.updateText(textInput.text + "I") },
-        Key.J to { this.updateText(textInput.text + "J") },
-        Key.K to { this.updateText(textInput.text + "K") },
-        Key.L to { this.updateText(textInput.text + "L") },
-        Key.M to { this.updateText(textInput.text + "M") },
-        Key.N to { this.updateText(textInput.text + "N") },
-        Key.O to { this.updateText(textInput.text + "O") },
-        Key.P to { this.updateText(textInput.text + "P") },
-        Key.Q to { this.updateText(textInput.text + "Q") },
-        Key.R to { this.updateText(textInput.text + "R") },
-        Key.S to { this.updateText(textInput.text + "S") },
-        Key.T to { this.updateText(textInput.text + "T") },
-        Key.U to { this.updateText(textInput.text + "U") },
-        Key.V to { this.updateText(textInput.text + "V") },
-        Key.W to { this.updateText(textInput.text + "W") },
-        Key.X to { this.updateText(textInput.text + "X") },
-        Key.Y to { this.updateText(textInput.text + "Y") },
-        Key.Z to { this.updateText(textInput.text + "Z") },
-        Key.SPACE to { this.updateText(textInput.text + " ") },
-        Key.SLASH to { this.updateText(textInput.text + "?")},
-        Key.PERIOD to { this.updateText(textInput.text + ".") },
-        Key.BACKSPACE to { if(textInput.text.isNotEmpty()){this.updateText(textInput.text.substring(0..textInput.text.length-2))} },
-        Key.ENTER to { UIMain.player!!.say(textInput.text, UIMain.player!!.getTarget()); UIMain.defocus() }
+        Key.A to { event: KeyEvent -> typeChar("A") },
+        Key.B to { event: KeyEvent -> typeChar("B") },
+        Key.C to { event: KeyEvent -> typeChar("C") },
+        Key.D to { event: KeyEvent -> typeChar("D") },
+        Key.E to { event: KeyEvent -> typeChar("E") },
+        Key.F to { event: KeyEvent -> typeChar("F") },
+        Key.G to { event: KeyEvent -> typeChar("G") },
+        Key.H to { event: KeyEvent -> typeChar("H") },
+        Key.I to { event: KeyEvent -> typeChar("I") },
+        Key.J to { event: KeyEvent -> typeChar("J") },
+        Key.K to { event: KeyEvent -> typeChar("K") },
+        Key.L to { event: KeyEvent -> typeChar("L") },
+        Key.M to { event: KeyEvent -> typeChar("M") },
+        Key.N to { event: KeyEvent -> typeChar("N") },
+        Key.O to { event: KeyEvent -> typeChar("O") },
+        Key.P to { event: KeyEvent -> typeChar("P") },
+        Key.Q to { event: KeyEvent -> typeChar("Q") },
+        Key.R to { event: KeyEvent -> typeChar("R") },
+        Key.S to { event: KeyEvent -> typeChar("S") },
+        Key.T to { event: KeyEvent -> typeChar("T") },
+        Key.U to { event: KeyEvent -> typeChar("U") },
+        Key.V to { event: KeyEvent -> typeChar("V") },
+        Key.W to { event: KeyEvent -> typeChar("W") },
+        Key.X to { event: KeyEvent -> typeChar("X") },
+        Key.Y to { event: KeyEvent -> typeChar("Y") },
+        Key.Z to { event: KeyEvent -> typeChar("Z") },
+        Key.SPACE to { event: KeyEvent -> typeChar(" ", " ") },
+        Key.SLASH to { event: KeyEvent -> typeChar("?", "/")},
+        Key.PERIOD to { event: KeyEvent -> this.updateText(textInput.text + ".") },
+        Key.BACKSPACE to { event: KeyEvent -> if(textInput.text.isNotEmpty()){this.updateText(textInput.text.substring(0..textInput.text.length-2))} },
+        Key.ENTER to { event: KeyEvent -> UIMain.player!!.say(textInput.text, UIMain.player!!.getTarget()); UIMain.defocus() }
     ))
     val textInput = TextInput(width = UIMain.width * 0.8)
 
@@ -62,6 +63,18 @@ class DialogMenu: UILayer {
 
     override fun views(): Set<View> {
         return views
+    }
+
+    fun typeChar(character: String){
+        typeChar(character.toUpperCase(), character.toLowerCase())
+    }
+
+    fun typeChar(upper: String, lower: String){
+        if(UIMain.shiftDown){
+            updateText(textInput.text + upper)
+        } else {
+            updateText(textInput.text + lower)
+        }
     }
 
     fun updateText(text: String){
