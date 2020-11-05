@@ -8,4 +8,8 @@ class Culture {
         this.perspectives = perspectives.toMutableSet()
     }
 
+    fun perspectiveOn(topic: String): Perspective?{
+        return perspectives.firstOrNull { it.topic == topic }
+    }
+
 }

@@ -1,9 +1,6 @@
 package model.shortstate
 
-import model.shortstate.messagetypes.GivePerspectiveFactory
-import model.shortstate.messagetypes.GreetingFactory
-import model.shortstate.messagetypes.SweetCaroline
-import model.shortstate.messagetypes.SweetCarolineFactory
+import model.shortstate.messagetypes.*
 
 abstract class Message {
 
@@ -11,6 +8,7 @@ abstract class Message {
         val factoriesInOrder = listOf(
                 SweetCarolineFactory,
                 GreetingFactory,
+                RequestPerspectiveFactory,
                 GivePerspectiveFactory
         )
 

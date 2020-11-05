@@ -42,6 +42,8 @@ class DialogMenu: UILayer {
         Key.Y to { this.updateText(textInput.text + "Y") },
         Key.Z to { this.updateText(textInput.text + "Z") },
         Key.SPACE to { this.updateText(textInput.text + " ") },
+        Key.SLASH to { this.updateText(textInput.text + "?")},
+        Key.PERIOD to { this.updateText(textInput.text + ".") },
         Key.BACKSPACE to { if(textInput.text.isNotEmpty()){this.updateText(textInput.text.substring(0..textInput.text.length-2))} },
         Key.ENTER to { UIMain.player!!.say(textInput.text, UIMain.player!!.getTarget()); UIMain.defocus() }
     ))

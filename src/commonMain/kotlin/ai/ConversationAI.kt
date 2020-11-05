@@ -6,6 +6,7 @@ import model.shortstate.Coordinate
 import model.shortstate.Message
 import model.shortstate.ShortStateCharacter
 import model.shortstate.messagetypes.Greeting
+import model.shortstate.messagetypes.RequestPerspective
 import model.shortstate.messagetypes.SweetCaroline
 import ui.UIMain
 import kotlin.random.Random
@@ -43,6 +44,13 @@ class ConversationAI {
                         parent.say("Hello", communication.speaker)
                     } else {
                         parent.say("Umm... hi", communication.speaker)
+                    }
+                }
+                if(it is RequestPerspective){
+                    if(parent.longCharacter.culture.perspectiveOn(it.perspective.topic) != null){
+                        parent.say(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text)
+                    } else {
+                        parent.say("Huh, I've never heard about that.")
                     }
                 }
             }
