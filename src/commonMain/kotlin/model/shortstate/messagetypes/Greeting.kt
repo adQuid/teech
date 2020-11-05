@@ -3,10 +3,9 @@ package model.shortstate.messagetypes
 import model.shortstate.Message
 import model.shortstate.MessageFactory
 
-class GreetingFactory: MessageFactory(){
-    companion object{
-        val helloWords = listOf("hello", "greetings")
-    }
+object GreetingFactory: MessageFactory(){
+    val helloWords = listOf("hello", "greetings")
+
 
     override fun generateMessages(text: String): List<Message> {
         val words = text.split(" ")

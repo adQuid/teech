@@ -1,5 +1,6 @@
 package model.shortstate
 
+import model.shortstate.messagetypes.GivePerspectiveFactory
 import model.shortstate.messagetypes.GreetingFactory
 import model.shortstate.messagetypes.SweetCaroline
 import model.shortstate.messagetypes.SweetCarolineFactory
@@ -8,8 +9,9 @@ abstract class Message {
 
     companion object{
         val factoriesInOrder = listOf(
-                SweetCarolineFactory(),
-                GreetingFactory()
+                SweetCarolineFactory,
+                GreetingFactory,
+                GivePerspectiveFactory
         )
 
         fun messageListFromString(s: String): List<Message>{

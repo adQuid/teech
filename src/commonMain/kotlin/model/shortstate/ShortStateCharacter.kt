@@ -9,12 +9,15 @@ import com.soywiz.korge.view.View
 import com.soywiz.korge.view.image
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
+import controller.LongStateController
 import controller.ShortStateController
+import model.longstate.LongStateCharacter
 import ui.UIMain
 
 class ShortStateCharacter: Entity {
 
     val id: Int
+    val longCharacter: LongStateCharacter
 
     var targetX: Int? = null
     var targetY: Int? = null
@@ -25,6 +28,7 @@ class ShortStateCharacter: Entity {
 
     constructor(id: Int, image: String, x: Int, y: Int): super(Coordinate(x,y), image){
         this.id = id
+        this.longCharacter = LongStateController.activeLongGame.characters.first { it.id == this.id }
         convoAI = ConversationAI(this)
     }
 
@@ -54,7 +58,7 @@ class ShortStateCharacter: Entity {
     }
 
     fun say(message: String, target: ShortStateCharacter? = null){
-        ShortStateController.activeShortGame.communications
+        ShortStateController.activeShortGame!!.communications
                 .add(Communication(Coordinate(location.x, location.y - 10), this, target, message, Message.messageListFromString(message)))
     }
 

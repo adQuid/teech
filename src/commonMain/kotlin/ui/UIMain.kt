@@ -68,7 +68,7 @@ object UIMain {
             }
         }
 
-        player = ShortStateController.activeShortGame.characters[0]
+        player = ShortStateController.activeShortGame!!.characters[0]
 
         fun allViewsThatShouldBeHere(): Collection<View>{
             var retval = charactersBeingDrawn.values + communicationsBeingDrawn.values + targetViews
@@ -137,8 +137,8 @@ object UIMain {
                     updateTargetView()
             }
 
-            addEntities(ShortStateController.activeShortGame.characters, charactersBeingDrawn, 0)
-            addEntities(ShortStateController.activeShortGame.communications, communicationsBeingDrawn, charactersBeingDrawn.size)
+            addEntities(ShortStateController.activeShortGame!!.characters, charactersBeingDrawn, 0)
+            addEntities(ShortStateController.activeShortGame!!.communications, communicationsBeingDrawn, charactersBeingDrawn.size)
 
             var i = 0
             targetViews.forEach{

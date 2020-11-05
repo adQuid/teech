@@ -9,15 +9,15 @@ import kotlin.math.sqrt
 
 object ShortStateController {
 
-    var activeShortGame: ShortGame = ShortGame()
+    var activeShortGame: ShortGame? = null
 
     suspend fun run(){
         println("got here")
-        while(true){
+        while(activeShortGame != null){
             delay(UIMain.frameDelay.toLong())
 
             val pixelsToMove = 100 * UIMain.frameDelay / 1000
-            activeShortGame.characters.forEach {
+            activeShortGame!!.characters.forEach {
                 if(it.targetX != null && it.targetY!= null){
                     val xToMove = it.targetX!! - it.location.x
                     val yToMove = it.targetY!! - it.location.y
@@ -31,13 +31,13 @@ object ShortStateController {
                 }
             }
 
-            activeShortGame.communications.filter{it.age == 50}.forEach{communication ->
-                activeShortGame.charactersInRange(communication.location, 400).forEach { recipient ->
+            activeShortGame!!.communications.filter{it.age == 50}.forEach{communication ->
+                activeShortGame!!.charactersInRange(communication.location, 400).forEach { recipient ->
                     recipient.convoAI.hear(communication)
                 }
             }
-            activeShortGame.communications.forEach { it.age++ }
-            activeShortGame.communications.removeAll { it.age > 100 }
+            activeShortGame!!.communications.forEach { it.age++ }
+            activeShortGame!!.communications.removeAll { it.age > 100 }
         }
     }
 
