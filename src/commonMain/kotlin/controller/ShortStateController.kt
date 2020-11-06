@@ -31,13 +31,19 @@ object ShortStateController {
                 }
             }
 
-            activeShortGame!!.communications.filter{it.age == 50}.forEach{communication ->
+            activeShortGame!!.communications.filter{it.oldEnoughToHear()}.forEach{communication ->
                 activeShortGame!!.charactersInRange(communication.location, 400).forEach { recipient ->
                     recipient.convoAI.hear(communication)
                 }
             }
+
+            activeShortGame!!.communications.filter{it.oldEnoughToRespond()}.forEach{communication ->
+                activeShortGame!!.charactersInRange(communication.location, 400).forEach { recipient ->
+                    recipient.convoAI.respondToLine(communication)
+                }
+            }
             activeShortGame!!.communications.forEach { it.age++ }
-            activeShortGame!!.communications.removeAll { it.age > 100 }
+            activeShortGame!!.communications.removeAll { it.oldEnoughToDie() }
         }
     }
 

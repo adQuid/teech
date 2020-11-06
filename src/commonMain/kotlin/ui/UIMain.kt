@@ -120,19 +120,22 @@ object UIMain {
             needToUpdateTargetView = false
             if(player != null && player!!.getTarget() != null){
                 val targetProfile = Image(resourcesVfs[player!!.getTarget()!!.image].readBitmap())
-                targetProfile.x = width * 0.8
+                targetProfile.x = 0.0
                 targetProfile.y = height - (width * 0.2)
                 targetProfile.width = width * 0.2
                 targetProfile.height = width * 0.2
 
                 val textWindow = Image(resourcesVfs["textbox.png"].readBitmap())
-                textWindow.x = 0.0
+                textWindow.x = width * 0.2
                 textWindow.y = height * 0.8
                 textWindow.width = width * 0.8
                 textWindow.height = height * 0.2
-                val text = textWindow.text(player!!.convoAI.lastThingSaidToMe(player!!.getTarget()))
-                text.y = height * 0.01
-                text.x = width * 0.01
+                for(i in 0..3){
+                    val text = Text(player!!.convoAI.lastThingSaidToMe(player!!.getTarget()).getOrElse(i,{""}))
+                    text.y = height * 0.01 + (i * (textWindow.height * 0.2))
+                    text.x = width * 0.01
+                    textWindow.addChild(text)
+                }
 
                 targetViews = setOf(
                     targetProfile,

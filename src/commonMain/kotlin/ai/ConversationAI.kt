@@ -26,16 +26,15 @@ class ConversationAI {
 
     fun hear(communication: Communication){
         memory.add(communication)
-
         if(UIMain.player == parent){
             UIMain.needToUpdateTargetView = true
-        } else if(communication.speaker != parent && UIMain.player != parent){
-            println("responding to line")
-            respondToLine(communication)
         }
     }
 
     fun respondToLine(communication: Communication){
+        if(communication.speaker == parent || UIMain.player == parent){
+            return
+        }
         communication.messages.forEach{
             if(it is SweetCaroline){
                 parent.say("Bah Bah Bah")
@@ -68,11 +67,11 @@ class ConversationAI {
         }
     }
 
-    fun lastThingSaidToMe(character: ShortStateCharacter?): String{
+    fun lastThingSaidToMe(character: ShortStateCharacter?): List<String>{
         if(memory.lastOrNull { it.speaker == character } != null){
-            return memory.last { it.speaker == character }!!.text
+            return memory.last { it.speaker == character }!!.splitIntoLines()
         } else {
-            return ""
+            return listOf()
         }
     }
 

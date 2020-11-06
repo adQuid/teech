@@ -2,7 +2,9 @@ package model.longstate
 
 class LongGame {
 
-    val lowPeopleCulture = Culture(listOf(Perspective("seventy psalms", 40, "The Seventy Psalms are a lovely philosophy.")))
+    val lowPeopleCulture = Culture(listOf(
+            Perspective("seventy psalms", 40, "The Seventy Psalms are a lovely philosophy. They guide the young, and comfort the old. You would be wise to seek them.")
+    ))
 
     val brightSeaCulture = Culture(listOf(Perspective("seventy psalms", -20, "A constant thorn in our side...")))
 
