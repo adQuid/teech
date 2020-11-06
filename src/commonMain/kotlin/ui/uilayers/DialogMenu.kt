@@ -53,6 +53,7 @@ class DialogMenu: UILayer {
     var dialogTags = listOf<View>()
 
     constructor(): super(){
+        textInput.x = UIMain.width * 0.2
         textInput.y = UIMain.height - textInput.height
         textInput.width = UIMain.width.toDouble()
     }
@@ -82,6 +83,7 @@ class DialogMenu: UILayer {
             index: Int, s: Message ->
             val retval = RoundRect(350.0, 50.0, 5.0)
             retval.color = RGBA.Companion.float(0.0, 0.8, 0.0, 1.0)
+            retval.x = UIMain.width * 0.2
             retval.y = UIMain.height - ((index+1) * 50.0) - textInput.height
             val textLabel = Text(s.tooltip()).centerOn(retval)
             textLabel.x = retval.x + 5
