@@ -15,11 +15,11 @@ class LongGame {
     )
 
     val characters = setOf(
-            LongStateCharacter(1, brightSeaCulture),
-            LongStateCharacter(2, brightSeaCulture),
-            LongStateCharacter(3, lowPeopleCulture),
-            LongStateCharacter(4, lowPeopleCulture),
-            LongStateCharacter(5, lowPeopleCulture)
+            LongStateCharacter(1, "armored ekf.png", brightSeaCulture),
+            LongStateCharacter(2, "elf lady.png", brightSeaCulture),
+            LongStateCharacter(3, "old bard.png", lowPeopleCulture),
+            LongStateCharacter(4, "old bard.png", lowPeopleCulture),
+            LongStateCharacter(5, "old bard.png", lowPeopleCulture)
     )
 
 }

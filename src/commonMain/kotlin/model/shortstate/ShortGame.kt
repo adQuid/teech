@@ -5,11 +5,12 @@ import kotlin.math.sqrt
 
 class ShortGame {
 
-    val characters = listOf(ShortStateCharacter(1, "armored ekf.png", 200, 500),
-            ShortStateCharacter(2, "old bard.png", 500, 400),
-            ShortStateCharacter(3, "old bard.png", 400, 200))
-
+    val characters: List<ShortStateCharacter>
     val communications = mutableListOf<Communication>()
+
+    constructor(encounter: Encounter){
+        characters = encounter.spawns.map { it.generateCharacter() }
+    }
 
     fun charactersInRange(coordinate: Coordinate, range: Int): Collection<ShortStateCharacter>{
         return characters.filter {

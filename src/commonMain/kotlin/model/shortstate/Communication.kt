@@ -11,7 +11,7 @@ class Communication: Entity {
     val text: String
     val messages: List<Message>
 
-    constructor(origin: Coordinate, speaker: ShortStateCharacter, target: ShortStateCharacter?, message: String, messages: List<Message>): super(origin, "korge.png"){
+    constructor(origin: Coordinate, speaker: ShortStateCharacter, target: ShortStateCharacter?, message: String, messages: List<Message>): super(origin){
         this.speaker = speaker
         this.target = target
         this.text = message

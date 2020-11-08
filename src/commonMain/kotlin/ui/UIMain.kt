@@ -119,7 +119,7 @@ object UIMain {
         suspend fun updateTargetView(){
             needToUpdateTargetView = false
             if(player != null && player!!.getTarget() != null){
-                val targetProfile = Image(resourcesVfs[player!!.getTarget()!!.image].readBitmap())
+                val targetProfile = player!!.getTarget()!!.display()
                 targetProfile.x = 0.0
                 targetProfile.y = height - (width * 0.2)
                 targetProfile.width = width * 0.2

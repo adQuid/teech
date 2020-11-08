@@ -26,7 +26,7 @@ class ShortStateCharacter: Entity {
 
     val convoAI: ConversationAI
 
-    constructor(id: Int, image: String, x: Int, y: Int): super(Coordinate(x,y), image){
+    constructor(id: Int, x: Int, y: Int): super(Coordinate(x,y)){
         this.id = id
         this.longCharacter = LongStateController.activeLongGame.characters.first { it.id == this.id }
         convoAI = ConversationAI(this)
@@ -49,7 +49,7 @@ class ShortStateCharacter: Entity {
 
     override suspend fun display(): View {
         println("displaying")
-        val retval = Image(resourcesVfs[image].readBitmap())
+        val retval = Image(resourcesVfs[longCharacter.image].readBitmap())
         if(UIMain.player!!.targetCharacter == this){
             retval.image(resourcesVfs["target.png"].readBitmap())
         }

@@ -6,12 +6,10 @@ import ui.UIMain
 abstract class Entity {
 
     var location: Coordinate
-    val image: String
     var needsRedraw = false
 
-    constructor(coordinate: Coordinate, image: String){
+    constructor(coordinate: Coordinate){
         this.location = coordinate
-        this.image = image
     }
 
     abstract suspend fun display(): View
