@@ -11,6 +11,7 @@ import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import controller.LongStateController
 import controller.ShortStateController
+import editorMode
 import model.longstate.LongStateCharacter
 import ui.UIMain
 
@@ -48,12 +49,13 @@ class ShortStateCharacter: Entity {
     }
 
     override suspend fun display(): View {
-        println("displaying")
         val retval = Image(resourcesVfs[longCharacter.image].readBitmap())
-        if(UIMain.player!!.targetCharacter == this){
+        if(UIMain.player != null && UIMain.player!!.targetCharacter == this){
             retval.image(resourcesVfs["target.png"].readBitmap())
         }
-        retval.onClick { mouseEvents -> if(mouseEvents.lastEvent.button == MouseButton.LEFT){ UIMain.player!!.target(this) }}
+        retval.onClick {
+            mouseEvents -> if( !editorMode && mouseEvents.lastEvent.button == MouseButton.LEFT){ UIMain.player!!.target(this) }
+        }
         return retval
     }
 
