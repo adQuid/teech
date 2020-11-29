@@ -3,6 +3,7 @@
   "politeGreetings": ["aea"],
   "perspectives":
           [
-            {"topic":"seventy psalms", "opinion":40, "text":"The Seventy Psalms are a lovely philosophy. They guide the young, and comfort the old. You would be wise to seek them."}
+            {"topic":"seventy psalms", "opinion":40, "minDisposition": 5, "text":"The Seventy Psalms are a lovely philosophy. They guide the young, and comfort the old. You would be wise to seek them."},
+            {"topic":"seventy psalms", "opinion":0, "minDisposition": -10, "text":"Yes, very important to my culture."}
           ]
 }

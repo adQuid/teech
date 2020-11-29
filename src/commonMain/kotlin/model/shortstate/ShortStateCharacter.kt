@@ -13,7 +13,9 @@ import controller.LongStateController
 import controller.ShortStateController
 import editorMode
 import model.longstate.LongStateCharacter
+import model.longstate.Perspective
 import ui.UIMain
+import kotlin.math.abs
 
 class ShortStateCharacter: Entity {
 
@@ -26,6 +28,8 @@ class ShortStateCharacter: Entity {
     private var targetCharacter: ShortStateCharacter? = null
 
     val convoAI: ConversationAI
+
+    var mood = 0
 
     constructor(id: Int, x: Int, y: Int): super(Coordinate(x,y)){
         this.id = id
@@ -97,6 +101,22 @@ class ShortStateCharacter: Entity {
         if(UIMain.charactersBeingDrawn.containsKey(this)){
             UIMain.charactersBeingDrawn[this]!!.x = location.x.toDouble()
             UIMain.charactersBeingDrawn[this]!!.y = location.y.toDouble()
+        }
+    }
+
+    fun perspectiveOn(topic: String): Perspective?{
+        return longCharacter.culture.perspectives.filter { it.minDisposition <= mood }.firstOrNull { it.topic == topic }
+    }
+
+    fun improveMoodTowards(target: Int){
+        if(mood < target){
+            mood += abs(target) / 4
+        }
+    }
+
+    fun lowerMoodTowards(target: Int){
+        if(mood > target){
+            mood -= abs(target) / 4
         }
     }
 }

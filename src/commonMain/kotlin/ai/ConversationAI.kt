@@ -40,15 +40,26 @@ class ConversationAI {
         }
         val responseOptions = mutableListOf<ConversationReaction>()
 
+        if(communication.target == parent){
+            parent.longCharacter.culture.politeGreetings.forEach {
+                if(communication.text.toLowerCase().contains(it.toLowerCase())){
+                    parent.improveMoodTowards(25)
+                    if(parent.mood > 15){
+                        responseOptions.add(ConversationReaction("Thanks, that's very sweet.", 10))
+                    }
+                }
+            }
+        }
+
         communication.messages.forEach{
             if(it is SweetCaroline){
                 responseOptions.add( ConversationReaction("Bah Bah Bah", 9999))
             }
             if(it is GivePerspective){
-                val myPerspective = parent.longCharacter.culture.perspectiveOn(it.perspective.topic)
+                val myPerspective = parent.perspectiveOn(it.perspective.topic)
                 if(myPerspective != null){
-                    if(it.perspective.opinion - parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.opinion > 50){
-                        responseOptions.add( ConversationReaction(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
+                    if(it.perspective.opinion - parent.perspectiveOn(it.perspective.topic)!!.opinion > 50){
+                        responseOptions.add( ConversationReaction(parent.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
                     }
                 }
             }
@@ -61,9 +72,9 @@ class ConversationAI {
                     }
                 }
                 if(it is RequestPerspective){
-                    val myPerspective = parent.longCharacter.culture.perspectiveOn(it.perspective.topic)
+                    val myPerspective = parent.perspectiveOn(it.perspective.topic)
                     if(myPerspective != null){
-                        responseOptions.add( ConversationReaction(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
+                        responseOptions.add( ConversationReaction(parent.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
                     } else {
                         responseOptions.add( ConversationReaction("Huh, I've never heard about that...", 4))
                     }

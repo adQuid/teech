@@ -16,8 +16,4 @@ class Culture {
         politeGreetings = (map["politeGreetings"] as List<String>).toSet()
     }
 
-    fun perspectiveOn(topic: String): Perspective?{
-        return perspectives.firstOrNull { it.topic == topic }
-    }
-
 }

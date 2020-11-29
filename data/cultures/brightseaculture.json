@@ -3,6 +3,7 @@
   "politeGreetings": ["good morning"],
   "perspectives":
   [
-    {"topic":"seventy psalms", "opinion":-20, "text":"A constant thorn in our side..."}
+    {"topic":"seventy psalms", "opinion":-20, "minDisposition": 30, "text":"A constant thorn in our side..."},
+    {"topic":"seventy psalms", "opinion":-20, "minDisposition": -50, "text":"A constant thorn in our side..."}
   ]
 }

@@ -11,7 +11,9 @@ object GivePerspectiveFactory: MessageFactory() {
     override fun generateMessages(text: String): List<Message> {
         val allTopics = LongStateController.activeLongGame.cultures.flatMap { it.perspectives.map { it.topic } }
 
-        val results = allTopics.filter { text.contains(Regex("$it[ .,;:]")) }.map { GivePerspective(Perspective(it, 0, text)) }
+        val results = allTopics.filter { text.contains(Regex("$it[ .,;:]")) }.map { GivePerspective(
+                Perspective(mapOf("topic" to it, "opinion" to 0.0, "minDisposition" to 0.0, "text" to text))
+        ) }
 
         if(results.size > 1){
             return results.subList(0,1)

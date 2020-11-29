@@ -7,17 +7,13 @@ class Perspective {
 
     val topic: String
     val opinion: Int
+    val minDisposition: Int
     val text: String
-
-    constructor(topic: String, opinion: Int, text: String){
-        this.topic = topic
-        this.opinion = opinion
-        this.text = text
-    }
 
     constructor(map: Map<String, Any>){
         topic = map["topic"] as String
         opinion = (map["opinion"] as Double).roundToInt()
+        minDisposition = (map["minDisposition"] as Double).roundToInt()
         text = map["text"] as String
     }
 
