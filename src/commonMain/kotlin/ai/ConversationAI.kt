@@ -12,6 +12,9 @@ import model.shortstate.messagetypes.SweetCaroline
 import ui.UIMain
 import kotlin.random.Random
 
+class ConversationReaction(val response: String, val priority: Int, val messages: List<Message> = listOf()) {
+
+}
 
 class ConversationAI {
 
@@ -35,34 +38,46 @@ class ConversationAI {
         if(communication.speaker == parent || UIMain.player == parent){
             return
         }
+        val responseOptions = mutableListOf<ConversationReaction>()
+
         communication.messages.forEach{
             if(it is SweetCaroline){
-                parent.say("Bah Bah Bah")
+                responseOptions.add( ConversationReaction("Bah Bah Bah", 9999))
             }
             if(it is GivePerspective){
                 val myPerspective = parent.longCharacter.culture.perspectiveOn(it.perspective.topic)
                 if(myPerspective != null){
                     if(it.perspective.opinion - parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.opinion > 50){
-                        parent.say(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, listOf(GivePerspective(myPerspective)), null)
+                        responseOptions.add( ConversationReaction(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
                     }
                 }
             }
             if(communication.target == parent){
                 if(it is Greeting){
                     if(thingsIAlreadySaid(communication.speaker).filterIsInstance<Greeting>().isEmpty()){
-                        parent.say("Hello", communication.speaker)
+                        responseOptions.add( ConversationReaction("Hello", 4))
                     } else {
-                        parent.say("Umm... hi", communication.speaker)
+                        responseOptions.add( ConversationReaction("Um... hi", 4))
                     }
                 }
                 if(it is RequestPerspective){
                     val myPerspective = parent.longCharacter.culture.perspectiveOn(it.perspective.topic)
                     if(myPerspective != null){
-                        parent.say(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, listOf(GivePerspective(myPerspective)), null)
+                        responseOptions.add( ConversationReaction(parent.longCharacter.culture.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
                     } else {
-                        parent.say("Huh, I've never heard about that.")
+                        responseOptions.add( ConversationReaction("Huh, I've never heard about that...", 4))
                     }
                 }
+            }
+        }
+
+        if(responseOptions.isNotEmpty()){
+            val bestOption = responseOptions.sortedByDescending { it.priority }.first()
+
+            if(bestOption.messages.isEmpty()){
+                parent.say(bestOption.response, null)
+            } else {
+                parent.say(bestOption.response, bestOption.messages, null)
             }
         }
     }

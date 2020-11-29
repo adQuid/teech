@@ -1,5 +1,7 @@
 package model.longstate
 
+import controller.LongStateController
+
 class LongStateCharacter {
 
     val id: Int

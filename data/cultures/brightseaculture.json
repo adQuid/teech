@@ -1,4 +1,6 @@
 {
+  "id": "brightsea",
+  "politeGreetings": ["good morning"],
   "perspectives":
   [
     {"topic":"seventy psalms", "opinion":-20, "text":"A constant thorn in our side..."}

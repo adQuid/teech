@@ -1,4 +1,6 @@
 {
+  "id": "low",
+  "politeGreetings": ["aea"],
   "perspectives":
           [
             {"topic":"seventy psalms", "opinion":40, "text":"The Seventy Psalms are a lovely philosophy. They guide the young, and comfort the old. You would be wise to seek them."}

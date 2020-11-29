@@ -11,10 +11,10 @@ class Communication: Entity {
     val text: String
     val messages: List<Message>
 
-    constructor(origin: Coordinate, speaker: ShortStateCharacter, target: ShortStateCharacter?, message: String, messages: List<Message>): super(origin){
+    constructor(origin: Coordinate, speaker: ShortStateCharacter, target: ShortStateCharacter?, text: String, messages: List<Message>): super(origin){
         this.speaker = speaker
         this.target = target
-        this.text = message
+        this.text = text
         this.messages = messages
     }
 
