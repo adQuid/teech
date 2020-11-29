@@ -9,11 +9,17 @@ buildscript {
 		maven { url = uri("https://plugins.gradle.org/m2/") }
 		mavenCentral()
 		google()
+		jcenter()
 	}
 	dependencies {
 		classpath("com.soywiz.korlibs.korge.plugins:korge-gradle-plugin:$korgePluginVersion")
+		classpath("com.beust:klaxon:5.0.5")
 	}
 }
+
+subprojects{ apply(plugin = "java") }
+
+
 
 apply<KorgeGradlePlugin>()
 

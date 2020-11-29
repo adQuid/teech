@@ -1,5 +1,8 @@
 package model.longstate
 
+import serialize.Serializer
+import kotlin.math.roundToInt
+
 class Perspective {
 
     val topic: String
@@ -12,5 +15,10 @@ class Perspective {
         this.text = text
     }
 
+    constructor(map: Map<String, Any>){
+        topic = map["topic"] as String
+        opinion = (map["opinion"] as Double).roundToInt()
+        text = map["text"] as String
+    }
 
 }

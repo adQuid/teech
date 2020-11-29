@@ -1,5 +1,7 @@
 package model.longstate
 
+import java.io.File
+
 class LongGame {
 
     val lowPeopleCulture = Culture(listOf(
@@ -8,11 +10,11 @@ class LongGame {
 
     val brightSeaCulture = Culture(listOf(Perspective("seventy psalms", -20, "A constant thorn in our side...")))
 
-    val cultures = setOf(
+    val cultures: Set<Culture> /*setOf(
             lowPeopleCulture,
             brightSeaCulture,
             Culture(listOf(Perspective("trains", 100, "I like trains")))
-    )
+    )*/
 
     val characters = setOf(
             LongStateCharacter(1, "armored ekf.png", brightSeaCulture),
@@ -22,4 +24,16 @@ class LongGame {
             LongStateCharacter(5, "old bard.png", lowPeopleCulture)
     )
 
+    constructor(){
+        val cultureStrings = File("data/cultures").walk().map {
+            try{
+                it.readText()
+            } catch (e: Exception){
+                println("failure")
+                ""
+            }
+        }
+
+        cultures = cultureStrings.filter{it != ""}.map{Culture(it)}.toSet()
+    }
 }
