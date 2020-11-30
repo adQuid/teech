@@ -1,8 +1,6 @@
 package ai
 
-import controller.ShortStateController
 import model.shortstate.Communication
-import model.shortstate.Coordinate
 import model.shortstate.Message
 import model.shortstate.ShortStateCharacter
 import model.shortstate.messagetypes.GivePerspective
@@ -10,7 +8,6 @@ import model.shortstate.messagetypes.Greeting
 import model.shortstate.messagetypes.RequestPerspective
 import model.shortstate.messagetypes.SweetCaroline
 import ui.UIMain
-import kotlin.random.Random
 
 class ConversationReaction(val response: String, val priority: Int, val messages: List<Message> = listOf()) {
 
@@ -56,10 +53,10 @@ class ConversationAI {
                 responseOptions.add( ConversationReaction("Bah Bah Bah", 9999))
             }
             if(it is GivePerspective){
-                val myPerspective = parent.perspectiveOn(it.perspective.topic)
+                val myPerspective = parent.surfacePerspectiveOn(it.perspective.topic)
                 if(myPerspective != null){
-                    if(it.perspective.opinion - parent.perspectiveOn(it.perspective.topic)!!.opinion > 50){
-                        responseOptions.add( ConversationReaction(parent.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
+                    if(it.perspective.opinion - parent.surfacePerspectiveOn(it.perspective.topic)!!.opinion > 50){
+                        responseOptions.add( ConversationReaction(parent.surfacePerspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
                     }
                 }
             }
@@ -72,11 +69,28 @@ class ConversationAI {
                     }
                 }
                 if(it is RequestPerspective){
-                    val myPerspective = parent.perspectiveOn(it.perspective.topic)
+                    val myPerspective = parent.surfacePerspectiveOn(it.perspective.topic)
                     if(myPerspective != null){
-                        responseOptions.add( ConversationReaction(parent.perspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
+                        responseOptions.add( ConversationReaction(parent.surfacePerspectiveOn(it.perspective.topic)!!.text, 50, listOf(GivePerspective(myPerspective))))
                     } else {
-                        responseOptions.add( ConversationReaction("Huh, I've never heard about that...", 4))
+                        responseOptions.add( ConversationReaction("Huh, I've never heard about that...", 10))
+                    }
+                }
+                if(it is GivePerspective){
+                    val truePerspective = parent.deepPerspectiveOn(it.perspective.topic)
+                    if(truePerspective != null){
+                        if(truePerspective!!.opinion > 10 && it.perspective.opinion > 10){
+                            parent.improveMoodTowards(30)
+                            responseOptions.add(ConversationReaction("It is pretty sweet, isn't it?", 15))
+                        } else if(truePerspective!!.opinion < -10 && it.perspective.opinion < -10){
+                            parent.improveMoodTowards(30)
+                            responseOptions.add(ConversationReaction("I know right, it sucks!", 15))
+                        } else {
+                            responseOptions.add(ConversationReaction("Good to hear.", 5))
+                        }
+
+                    } else {
+                        responseOptions.add( ConversationReaction("Huh, I've never heard about that...", 10))
                     }
                 }
             }

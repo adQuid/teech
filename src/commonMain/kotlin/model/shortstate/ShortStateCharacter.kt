@@ -104,8 +104,12 @@ class ShortStateCharacter: Entity {
         }
     }
 
-    fun perspectiveOn(topic: String): Perspective?{
-        return longCharacter.culture.perspectives.filter { it.minDisposition <= mood }.firstOrNull { it.topic == topic }
+    fun surfacePerspectiveOn(topic: String): Perspective?{
+        return longCharacter.culture.perspectives.sortedByDescending { it.minDisposition }.filter { it.minDisposition <= mood }.firstOrNull { it.topic == topic }
+    }
+
+    fun deepPerspectiveOn(topic: String): Perspective?{
+        return longCharacter.culture.perspectives.sortedByDescending { it.minDisposition }.firstOrNull { it.topic == topic }
     }
 
     fun improveMoodTowards(target: Int){
